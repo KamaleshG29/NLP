@@ -1,0 +1,27 @@
+import sys
+!{sys.executable} -m pip install pytesseract
+
+!pip install pytesseract
+from PIL import Image, ImageFilter, ImageOps
+import pytesseract
+
+# Set the path to the Tesseract executable
+pytesseract.pytesseract.tesseract_cmd = r"C:/Users/techa/OneDrive/Desktop/resumes/nlp/tesseract.exe"
+
+def preprocess_image(image):
+    image = image.convert("L")
+    image = ImageOps.invert(image)
+    image = image.filter(ImageFilter.SHARPEN)
+    return image
+
+def perform_ocr(image_path):
+    image = Image.open(image_path)
+    image = preprocess_image(image)
+    text = pytesseract.image_to_string(image)
+    return text
+
+if __name__== "__main__":
+    image_path = 'C:/Users/techa/OneDrive/Desktop/resumes/nlp/news.png'
+    result = perform_ocr(image_path)
+    print("OCR Result:")
+    print(result)
